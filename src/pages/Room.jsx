@@ -15,8 +15,20 @@ const Room = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+    // Function to fetch messages from the database
+    const getMessages = async () => {
+      const response = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTION_ID_MESSAGES,
+        [Query.orderDesc("$createdAt"), Query.limit(100)]
+      );
+      setMessages(response.documents);
+    };
+
+    // Fetch messages on component mount
     getMessages();
 
+    // Subscribe to real-time updates
     const unsubscribe = client.subscribe(
       `databases.${DATABASE_ID}.collections.${COLLECTION_ID_MESSAGES}.documents`,
       (response) => {
@@ -25,7 +37,6 @@ const Room = () => {
             "databases.*.collections.*.documents.*.create"
           )
         ) {
-          console.log("A MESSAGE WAS CREATED");
           setMessages((prevState) => [response.payload, ...prevState]);
         }
 
@@ -34,7 +45,6 @@ const Room = () => {
             "databases.*.collections.*.documents.*.delete"
           )
         ) {
-          console.log("A MESSAGE WAS DELETED!!!");
           setMessages((prevState) =>
             prevState.filter((message) => message.$id !== response.payload.$id)
           );
@@ -42,26 +52,14 @@ const Room = () => {
       }
     );
 
-    console.log("unsubscribe:", unsubscribe);
-
+    // Cleanup subscription on component unmount
     return () => {
       unsubscribe();
     };
   }, []);
 
-  const getMessages = async () => {
-    const response = await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTION_ID_MESSAGES,
-      [Query.orderDesc("$createdAt"), Query.limit(100)]
-    );
-    console.log(response.documents);
-    setMessages(response.documents);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("MESSAGE:", messageBody);
 
     const permissions = [Permission.write(Role.user(user.$id))];
 
@@ -71,7 +69,7 @@ const Room = () => {
       body: messageBody,
     };
 
-    const response = await databases.createDocument(
+    await databases.createDocument(
       DATABASE_ID,
       COLLECTION_ID_MESSAGES,
       ID.unique(),
@@ -79,16 +77,11 @@ const Room = () => {
       permissions
     );
 
-    console.log("RESPONSE:", response);
-
-    // setMessages(prevState => [response, ...prevState])
-
     setMessageBody("");
   };
 
   const deleteMessage = async (id) => {
     await databases.deleteDocument(DATABASE_ID, COLLECTION_ID_MESSAGES, id);
-    //setMessages(prevState => prevState.filter(message => message.$id !== message_id))
   };
 
   return (
@@ -99,11 +92,9 @@ const Room = () => {
           <div>
             <textarea
               required
-              maxlength="250"
+              maxLength="250"
               placeholder="Say something..."
-              onChange={(e) => {
-                setMessageBody(e.target.value);
-              }}
+              onChange={(e) => setMessageBody(e.target.value)}
               value={messageBody}
             ></textarea>
           </div>
@@ -131,13 +122,11 @@ const Room = () => {
                 </p>
 
                 {message.$permissions.includes(
-                  `delete(\"user:${user.$id}\")`
+                  `delete("user:${user.$id}")`
                 ) && (
                   <Trash2
                     className="delete--btn"
-                    onClick={() => {
-                      deleteMessage(message.$id);
-                    }}
+                    onClick={() => deleteMessage(message.$id)}
                   />
                 )}
               </div>
