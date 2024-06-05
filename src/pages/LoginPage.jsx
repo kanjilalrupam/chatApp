@@ -26,7 +26,7 @@ const LoginPage = () => {
 
   return (
     <div className="auth--container">
-      {/* <h1>Chat App</h1> */}
+      <h1 className="login_header">Chat App</h1>
       <div className="form--wrapper">
         <form
           onSubmit={(e) => {
