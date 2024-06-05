@@ -1,14 +1,16 @@
 /* Global settings */
 
 :root {
-  --mainBgColor: rgba(20, 20, 31, 11);
-  --secondaryBgColor: rgba(27, 27, 39, 1);
-  --borderColor1: rgba(40, 41, 57, 1);
-  --borderColor2: rgba(79, 86, 105, 1);
-  --textColorMain: #fff;
-  --textColorSecondary: rgb(226, 227, 232);
-  --themeColorMain: #4caf50; /* Changed from red to medium green */
+  --mainBgColor: #14141f;
+  --secondaryBgColor: #1b1b27;
+  --borderColor1: #282939;
+  --borderColor2: #4f5669;
+  --textColorMain: #ffffff;
+  --textColorSecondary: #e2e3e8;
+  --themeColorMain: #4caf50;
   --themeColorSecondary: #386fd2;
+  --timestampColor: #a4a1a1;
+  --deleteBtnColor: #8db3dd;
 }
 
 * {
@@ -19,27 +21,13 @@
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-.login_header {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #4caf50; /* Green background */
-  color: white; /* White text */
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  text-align: center;
-  width: 80%; /* Adjust the width as needed */
+body {
+  background-color: var(--mainBgColor);
+  color: var(--textColorMain);
 }
 
 a {
   color: #40e0d0;
-}
-
-body {
-  background-color: var(--mainBgColor);
-  color: var(--textColorMain);
 }
 
 .container {
@@ -56,9 +44,27 @@ body {
   justify-content: center;
 }
 
+.login_header {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--themeColorMain);
+  color: var(--textColorMain);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 80%;
+}
+
 .form--wrapper {
-  width: 600px;
+  width: 100%;
+  max-width: 400px;
   padding: 2em;
+  background-color: var(--secondaryBgColor);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .field--wrapper {
@@ -67,8 +73,6 @@ body {
   gap: 1em;
   padding: 0.5em 0;
 }
-
-/* Form Input Styling */
 
 input[type="text"],
 input[type="password"],
@@ -80,13 +84,10 @@ textarea {
   padding: 1rem;
   border-radius: 3px;
   width: 100%;
-  color: var(--color-light);
+  color: var(--textColorMain);
   outline: none;
   font-size: 18px;
-  text-shadow: none !important;
 }
-
-/* Button Styling */
 
 .btn {
   padding: 0.5em 1em;
@@ -94,6 +95,7 @@ textarea {
   border-radius: 2px;
   cursor: pointer;
   transition: 0.3s;
+  font-size: 16px;
 }
 
 .btn--lg {
@@ -101,19 +103,18 @@ textarea {
 }
 
 .btn--main {
-  background-color: #4caf50; /* Changed from red to medium green */
-  color: #fff;
+  background-color: var(--themeColorMain);
+  color: var(--textColorMain);
 }
 
 .btn--secondary {
-  background-color: #8db3dd;
+  background-color: var(--deleteBtnColor);
+  color: var(--textColorMain);
 }
 
 .btn:hover {
   opacity: 0.7;
 }
-
-/* Header Styling */
 
 #header--wrapper {
   background-color: var(--mainBgColor);
@@ -132,10 +133,8 @@ textarea {
 }
 
 .header--link:hover {
-  color: #8db3dd;
+  color: var(--deleteBtnColor);
 }
-
-/* Room Styling */
 
 .room--container {
   padding: 2em;
@@ -157,9 +156,8 @@ textarea {
 
 .message--wrapper {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
-  gap: 0.5em;
+  gap: 1em;
   margin: 1em;
 }
 
@@ -170,33 +168,42 @@ textarea {
 }
 
 .message--body {
-  padding: 0.5em 0;
   color: var(--textColorSecondary);
   background-color: var(--themeColorMain);
   padding: 1em;
   border-radius: 20px;
   width: fit-content;
   max-width: 100%;
-  word-wrap: break-word; /* added */
+  word-wrap: break-word;
 }
 
 .message--body--owner {
-  border: 1px solid #4caf50; /* Changed from red to medium green */
+  border: 1px solid var(--themeColorMain);
   background-color: var(--secondaryBgColor);
+  align-self: flex-end;
+  margin-left: auto;
 }
 
 .message-timestamp {
-  margin-left: 1em;
-  color: rgb(164, 161, 161);
+  color: var(--timestampColor);
+  font-size: 0.75rem;
+  text-align: right;
+  margin-top: 0.5em;
+}
+.error-message {
+  color: red;
+  margin-bottom: 1em;
+  font-weight: bold;
 }
 
 .delete--btn {
-  color: #8db3dd;
+  color: var(--deleteBtnColor);
   cursor: pointer;
   transition: 0.3s;
   width: 16px;
+  margin-left: 0.5em;
 }
 
 .delete--btn:hover {
-  color: #4caf50; /* Changed from red to medium green */
+  color: var(--themeColorMain);
 }

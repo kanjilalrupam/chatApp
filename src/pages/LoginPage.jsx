@@ -7,32 +7,37 @@ import "../index.css";
 const LoginPage = () => {
   const { user, handleUserLogin } = useAuth();
   const [credentials, setCredentials] = useState({ email: "", password: "" });
-
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
       navigate("/");
     }
-  }, []);
+  }, [user, navigate]);
 
   const handleInputChange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
 
     setCredentials({ ...credentials, [name]: value });
-    // console.log('CREDS:', credentials)
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await handleUserLogin(e, credentials);
+    } catch (err) {
+      setError("Login failed. Please check your credentials and try again.");
+    }
   };
 
   return (
     <div className="auth--container">
       <h1 className="login_header">Chat App</h1>
       <div className="form--wrapper">
-        <form
-          onSubmit={(e) => {
-            handleUserLogin(e, credentials);
-          }}
-        >
+        {error && <p className="error-message">{error}</p>}
+        <form onSubmit={handleSubmit}>
           <div className="field--wrapper">
             <label>Email:</label>
             <input
@@ -41,9 +46,7 @@ const LoginPage = () => {
               name="email"
               placeholder="Enter your email..."
               value={credentials.email}
-              onChange={(e) => {
-                handleInputChange(e);
-              }}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -55,9 +58,7 @@ const LoginPage = () => {
               name="password"
               placeholder="Enter password..."
               value={credentials.password}
-              onChange={(e) => {
-                handleInputChange(e);
-              }}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -71,7 +72,7 @@ const LoginPage = () => {
         </form>
 
         <p>
-          Dont have an account? Register <Link to="/register">here</Link>
+          Don't have an account? Register <Link to="/register">here</Link>
         </p>
       </div>
     </div>

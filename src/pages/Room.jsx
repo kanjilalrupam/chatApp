@@ -80,6 +80,12 @@ const Room = () => {
     setMessageBody("");
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      handleSubmit(e);
+    }
+  };
+
   const deleteMessage = async (id) => {
     await databases.deleteDocument(DATABASE_ID, COLLECTION_ID_MESSAGES, id);
   };
@@ -95,6 +101,7 @@ const Room = () => {
               maxLength="250"
               placeholder="Say something..."
               onChange={(e) => setMessageBody(e.target.value)}
+              onKeyPress={handleKeyPress}
               value={messageBody}
             ></textarea>
           </div>
